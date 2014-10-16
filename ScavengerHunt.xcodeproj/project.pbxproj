@@ -12,6 +12,9 @@
 		F2CCF3E719B916CF0075867E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2CCF3E519B916CF0075867E /* Main.storyboard */; };
 		F2CCF3E919B916CF0075867E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2CCF3E819B916CF0075867E /* Images.xcassets */; };
 		F2CCF3F519B916D00075867E /* ScavengerHuntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2CCF3F419B916D00075867E /* ScavengerHuntTests.swift */; };
+		F2CCF3FF19B923310075867E /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2CCF3FE19B923310075867E /* ListViewController.swift */; };
+		F2CCF40119B94B020075867E /* ScavengerHuntItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2CCF40019B94B020075867E /* ScavengerHuntItem.swift */; };
+		F2CCF40319B95DC80075867E /* ItemsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2CCF40219B95DC80075867E /* ItemsManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,9 @@
 		F2CCF3EE19B916D00075867E /* ScavengerHuntTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScavengerHuntTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2CCF3F319B916D00075867E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F2CCF3F419B916D00075867E /* ScavengerHuntTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScavengerHuntTests.swift; sourceTree = "<group>"; };
+		F2CCF3FE19B923310075867E /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		F2CCF40019B94B020075867E /* ScavengerHuntItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScavengerHuntItem.swift; sourceTree = "<group>"; };
+		F2CCF40219B95DC80075867E /* ItemsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +81,9 @@
 		F2CCF3DE19B916CF0075867E /* ScavengerHunt */ = {
 			isa = PBXGroup;
 			children = (
+				F2CCF3FE19B923310075867E /* ListViewController.swift */,
+				F2CCF40019B94B020075867E /* ScavengerHuntItem.swift */,
+				F2CCF40219B95DC80075867E /* ItemsManager.swift */,
 				F2CCF3E119B916CF0075867E /* AppDelegate.swift */,
 				F2CCF3E319B916CF0075867E /* ViewController.swift */,
 				F2CCF3E519B916CF0075867E /* Main.storyboard */,
@@ -210,6 +219,9 @@
 			files = (
 				F2CCF3E419B916CF0075867E /* ViewController.swift in Sources */,
 				F2CCF3E219B916CF0075867E /* AppDelegate.swift in Sources */,
+				F2CCF40119B94B020075867E /* ScavengerHuntItem.swift in Sources */,
+				F2CCF3FF19B923310075867E /* ListViewController.swift in Sources */,
+				F2CCF40319B95DC80075867E /* ItemsManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

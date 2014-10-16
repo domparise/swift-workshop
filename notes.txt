@@ -1,0 +1,343 @@
+Swift:
+// talk by Malcom Crawford
+// file the safari bug: bugreport.apple.com
+Why safe typing:
+half of iOS security problems from bad design
+40% of other bugs are buffer and array overflows
+swift covers that
+
+swift design motivation:
+single inheritance
+protocols
+behavior oriented rather than type orianted
+strong & loose typing
+ARC
+'predictable performance’
+
+concepts:
+application architecture - ‘things talking to eachother'
+design patterns 
+swift terminology
+
+swift message syntax:
+receiver.message()
+receiver.message(arg1, andArgument:arg2)
+
+ScavengerHunt
+in design, consider User Experience first
+focus on user data
+one thing at a time
+‘screenfuls of content’
+consider multiple devices, iPad and iOS 
+storyboard independent of device
+functionality:
+display list of things to find
+add items to the list
+take a picture of an item ‘i have actually found this thing’
+show picture in list
+// Jack Lawrence
+3 screens
+image view 
+list view
+add item view
+// emphasis on auto layout as a constraint driven system
+
+Create new project -> use swift and universal view 
+first making changes to main.storyboard
+highlighting using search bar for object reference
+drag and drop text field
+add auto layout constraints
+bottom right of storyboard is auto layout features
+left: add new alignment constraints
+// he usually selects text field, then control drags into space above -> ‘top space to top layout guide’
+// control drag to space on left and right -> leading space to container margin
+// where the item will end up with the constraints you’ve currently specified
+uses absolute values 
+use orange and dotted lines, which are already there to line things up
+select the box then use ‘tie fighter’ to “update constraints” // really nice
+// left navigation of main window for storyboard lets you select constraints individually
+
+// mike’s method: square shaped tie fighter, define constraints like there
+what we actually did: depth first
+uiview
+rectangular area of screen
+arranged hierarchically
+custom view hierarchy -> navigation view -> tab bar view -> window -> assembled views
+
+===================
+Anatomy of an application:
+
+views:
+3 separate scenes
+text field
+list of items
+photo pickup 
+
+Controllers: each view managed by controller
+controllers inherit from UIViewController
+also useful: UITableViewController
+
+Data: flows between view controllers (Model)
+
+Cocoa:
+user driven
+user interacts with control view
+don’t have to figure out what the user did
+user { taps, swipes, drags} system responds
+the trick with cocoa: ‘getting yourself into the right place at the right time’
+
+Object-oriented thinking:
+instances as actual things
+message-sending is things talking to each other
+things collaborate to achieve a result
+think very literally as things being animated beings communicating with each other
+
+add the list scene: table views and delegation
+encouraged to look up documentation, just from api reference
+reinforced the ‘companion guides’
+uitableview - single column, vertical scrolling, larger data sets
+two styles:
+plain, a single scroll
+grouped, like settings, multiple list connected
+has:
+header
+footer
+broken into multiple sections
+each section potentially contains
+- section header, footer, and cells
+cocoa has shallow class heirarchy
+typically organized with data source at top, which we ask questions of
+questions:
+how many sections “am I organizing my content for”
+how many rows in each section
+what is the content for? iPhone or iPad, “give me the view you want me to display
+Uitablebiew manages its own reuse queue
+table view controller says “give me cell for row 0 in section 0, data source responds with “ok, which view do you want it for”, here it 
+
+starting with data source as: var itemsList = [“Cat”, “Bird”, “Brick”]
+want datasource as mutable array to add and remove
+// if you don’t specify number of sections, to muse uses them
+// cell.textLabel!.text “whats the exclamation mark”: ‘optional’ type, may or may not have value, exclamation says “get the actual value from it, and assert that the value is there”
+// added by redhead: “optionals can give int and scalars, this lets you use sentinel values built into the type”, rather than having to set if theVar == -1
+
+Delegation:
+data source delegates 
+
+Code: 
+in storyboard add table view controller scene
+set the prototype cell’s reuse identifier to “ListVIewCell”
+in ListViewController, do something
+
+in object library, add tableViewController to scene
+make it be the first thing seen, in attributes inspector, pencil with line in top right
+click, “Is Initial View Controller”
+-> want to give tableviewCell an identifier change Table View Cell to ListViewCell, do this in either attribute inspector or in left bar
+want to add custom behavior so we need to subclass
+
+then add a swift file, ListViewController.swift, then look at my file for the code
+delegate messages pass in object as first object in method, assuming you know the first but, would refer to as “numberOfRowesInSecition”
+override asserts that you override the method, tells compiler and anyone reading the code to customize the object
+// if you override a method that doesn’t exist, compiler can tell you straight away
+
+about for swift: notice 2 names for parameter, gives variable names, and type
+as keyword does typecasting
+// redhead: some apis require that you cast
+
+at first didn’t work out as we expected because:
+we didn’t connect the viewController to the storyboard, need to give the class ListViewController, which we just defined
+select “table view controller” then check out inspector (third, newspaper) 
+give class in inspector, ListViewController
+
+configured in storyboard for us
+One possible hangup is not setting the identifier, which is used by dequeReusableCellWithIdentifier(“blah”)
+
+setting up Navigation (seques and actions)
+have 2 scenes, want to transition between them
+Navigation controller manages push and pop on view stack
+also manages transitioning between different controllers
+hitting back or next is a navigation controller action
+system defined user interface 
+
+in storyboard, navigation view is embedded in view controller as navigation item
+
+Segue: transitioning from one scene to another
+they have identifiers so you know which viewcontroller initialized which transition
+want add button in list view controller to go to text view field: can control + drag from button to button,
+using outline view, on left side, lets you control drag from add button to part in list
+// hacker kid: connections inspector can also be used to do this
+
+actions: user taps on button, which sends pre-defined message to other part of system
+event-driven design, implement the code that you’re invoking “target-action pattern”
+
+actions: reference code from the storyboard
+start with @IBAction attribute, tells Xcode, treat this as something you can use as an action / you can use to make connections
+takes single argument, called sender, which is the object sending the message. single argument, returns void
+async control flow from there
+assuming you have action implemented, can control drag to view controller (left button on top of view controller)
+code: 1. embed scenes in navigation controller 2. add bar button items 3. create segue 4. implement action
+
+select view controller, then in top Editor > embed in > navigation controller (this adds navigation controller to storyboard and sets view controller selected as root view controller)
+dimensions of view change because of navigation controller, so need to ‘tie fighter’ update frames
+
+add bar button item to top navigation bar
+use standard add button (pencil with line , attributes inspector, select the add identifier)
+add cancel and done buttons to text view
+want to segue to the navigation controller. segue to navigation controller that contains the view controller
+
+control + drag the plus button (or on the left selection thing) to the proper navigation controller, get segue added as scene
+storyboard hides the code behind things, want to write the code that corresponds to the right action, 
+do this using the “assistant editor” “what source code goes along with what you’re working with”, the tuxedo, or venn diagram on yosemite
+see too things side-by-side that work together. used to add and make connections
+
+with the assistant editor, selecting the cancel button should show view controller on the right hand side
+// can remove pre-existing code
+control drag from cancel button into code to generate the @IBAction for the cancel button
+in connection portion of pop-up menu, select action, and give it a name (cancel)
+this should add a function in your code 
+also adds a filled in circle in the gutter, to state that its a filled in connection, that has been established
+helps to look through source code to check if action is filled / connection
+// mike: assistant editor works as a good sanity check 
+then add dismissViewControllerAnimated
+
+technical: forward segues are created lazily,
+can use “unwind segue” to cached / previously created views
+there are 2 navigation controllers initially because each view controller hierarchy is represented independently
+used more as a layout principle (note the hierarchy of view controllers implemented independently)
+
+managing a new item (outlets and unwind segues)
+when tapping done button want to unwind back to original view controller we were at.
+// this portion is the 'holy grail’ of it
+modular outlets were done before
+done button needs to get value typed into text field, and add back to unwound view controller
+// ! optionals are compiler optimizations for enums // interesting use-cases on swift blog
+
+Outlets: provides access from source code into something in storybaord, opposed of action
+@IBOutlet, can be a typical var, i.e. @IBOutlet weak var textField: UITextField!
+
+ARC analogy “imagine someone on liferaft holding on to someone else, if the person thats being held is holding a strong reference, and the other person lets go, they’re fine. if they’re holding on to a weak reference and they’re let go, they die” strong and weak references in memory, with regards to object life cycles
+
+prepareForSegue() gets called regardless, which checks value in text field, 
+
+Unwinding:
+“going back to a previous view controller without creating a new one”
+need to define an unwind segue in the endpoint code
+unwind segue method algorithm:
+add to destination view controller
+must: take storyabord segue as parameter, and be decorated as @IBAction
+in list view controller we implement unwindToList() 
+then we update the table view
+to ask if the previous page has an outlet we’re looking for, we can: let addController = segue.sourceViewController as ViewController
+// check if source view controller has an itemName, drawn from @IBOutlet
+then we increment and update table view, and add an IndexPath
+then tell table view to insert row, at new IndexPath, with the animation we desire
+
+// redhead: we can use itemsList += [newItemName],  rather than using either itemsList.append(), or changing to a mutable array
+in the storyboard, we can control click done to end, on top bar
+then control drag from text field to the view controller code,
+
+don’t forget to put an identifier on the segue (“DoneItem” in attribute editor on right sidebar)
+important to use the segue identifier, to check on the other end and handle correctly
+
+main new feature was outlets, which turned to setting actions, // connecting storyboard to code
+then setup unwind segue, and handled the segue in the tableview controller, and added to the “data source”
+// all we had to do was insert a row, didn’t need to configure it, as in we didn’t have to make a call to cellForRowWithIndexPath
+
+// at the end, ask if theres a convention for separating interface from implementation
+
+Defining the Model (foundation)
+Foundation:
+NSObject, common cocoa types, File Management, Persistence, Networking
+good std lib with a lot of functionality pre-defined
+Foundation contrasted with UIKit, which is a different framework
+
+model: ScavengerHuntItem, properties (name, photo, isComplete)
+isComplete is part of business logic
+
+class ScavengerHuntItem: NSObject {
+    let name: String // let means immutable
+    var photo: UIImage? // from UIKit
+    var isComplete: Bool { // computed property, whether or not photo is nil
+	get {
+	    return photo != nil
+	}
+    }
+    init(name:String) { // because we have name as let, we need an initializer  // not called init function 
+	self.name = name
+    }
+}
+
+Code: 
+create ScavengerHuntItem
+add properties
+in ListViewController, change list to mtable array of Scavengerhunt items,
+make changes throughout
+// don’t forget to import UIKit
+// swift classes must have initializers to set immutable values 
+super.init() is called initially in certain cases where its necessary
+
+change var nameItem to car createdItem: ScavengerHuntItem, then initialize upon pulling from the textField
+
+taking photos (selection and image picker) 
+done by implementing UIImagePickerController
+uses delegation, which manages its own navigation controller. selected photo contained in dictionary
+because of delegation / protocols, you need to implement certain functions
+table view selection
+Code:
+conform listviewcontroller to delegate protocol
+set self as image picker’s delegate
+implement imagepickercontroller:didFicnishPickingMediaWithInfo
+show images for cellForRowAtIndexPath 
+
+// lots of code added (insert montage here)
+// big advantage of swift is strongly typed enumerations, like .Camera and .PhotoLibrary
+
+added to cellForRowAtIndexPath, and didSelectRowAtIndexPath, and didFinishPickingMediaWithInfo
+
+Archiving (persistence)
+Using archivers 
+saving out parts of object graphs, typically from NSData objects (a collection of bits)
+writing to file
+passing things from one process to another
+Need to archive and unarchive
+serialization does not guarantee uniqueness, whereas archiving does
+Participants
+using an nscoder (NSKeyedArchiver, and NSKeyedUnarchiver) can encode/decode data
+Must implement NSCoding Protocol in your model 
+func encodeWithCoder(aCoder:NSCoder) // add variables to ana rchiver
+init(coder aDecoder:NSCoder) 
+add properties to an archive with encodeObject(_ objv:AnyObject, forKey key:String) 
+get properties from an archive with:
+func decodeObjectForKey(keyLString) ->AnyObject
+must implement the encoding method
+func encodeWithCoder(coder:NSCoder) {
+    coder.encodeObject(name, forKey: SerializationKeys.name)
+    if let thePhoto = photo 
+	coder.encodeObject(thePhoto, 
+pass decoder to initialization function
+// required keyword states that any subclasses need to implement this
+
+Managing Files
+NSFileManager
+perform basic file I/O
+find std directories
+test for existence
+
+May want to implement as a Singleton data controller object
+Code:
+add nscoding to scavengerhuntitem
+implement itemsManager
+convert ListViewController to ItemsManager instance
+
+Lazy: their values only get initialized if and when they’re accessed, thereafter then they’re set
+then want to figure out where the archive is stored to and set from
+
+need to add code to using the newly defined ItemsManager, then need to switch with the items list, and save after adding an image and adding an item to the list 
+// UIDocument class manages intricacies like saving early and often
+
+Next Steps:
+UI polish
+make photo smaller
+properly encapsulate in items manager
+make the app do more
+
+
